@@ -1,0 +1,32 @@
+[package]
+name = "lemonwire-server"
+description = "Lemon Wire index server: CLI, HTTP API, SQLite index and passkey tracker"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "lemonwire-server"
+path = "src/main.rs"
+
+[dependencies]
+lemonwire-proto.workspace = true
+anyhow.workspace = true
+axum.workspace = true
+clap.workspace = true
+percent-encoding.workspace = true
+rusqlite.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+hmac.workspace = true
+hex.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+tempfile.workspace = true
+
+[dev-dependencies]
+reqwest.workspace = true

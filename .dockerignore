@@ -1,0 +1,7 @@
+target
+target-docker
+.git
+data
+*.db
+*.key
+.env

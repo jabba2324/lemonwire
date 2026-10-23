@@ -1,0 +1,10 @@
+/target/
+/target-docker/
+data/
+*.db
+*.db-wal
+*.db-shm
+*.key
+.env
+.env.*
+!.env.example

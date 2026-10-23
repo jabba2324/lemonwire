@@ -1,0 +1,49 @@
+[workspace]
+resolver = "3"
+members = ["crates/proto", "crates/server", "crates/client-core", "crates/client-cli", "crates/client-gui"]
+
+[workspace.package]
+version = "0.2.0"
+edition = "2024"
+license = "MIT"
+publish = false
+repository = "https://github.com/jabba2324/lemonwire"
+rust-version = "1.89"
+
+[workspace.dependencies]
+lemonwire-proto = { path = "crates/proto" }
+lemonwire-client-core = { path = "crates/client-core" }
+lemonwire-server = { path = "crates/server" }
+
+anyhow = "1"
+async-trait = "0.1"
+axum = "0.8"
+base64 = "0.23"
+clap = { version = "4", features = ["derive", "env"] }
+directories = "6"
+ed25519-dalek = "2.2"
+futures = "0.3"
+getrandom = "0.3"
+hex = "0.4"
+librqbit = { version = "9", default-features = false }
+percent-encoding = "2"
+reqwest = { version = "0.13", default-features = false, features = ["json", "query"] }
+rusqlite = { version = "0.40", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha1 = "0.11"
+sha2 = "0.11"
+hmac = "0.13"
+argon2 = "0.6"
+chacha20poly1305 = "0.11"
+rpassword = "7"
+zeroize = "1"
+url = "2"
+tempfile = "3"
+thiserror = "2"
+tokio = { version = "1", features = ["full"] }
+tokio-stream = { version = "0.1", features = ["sync"] }
+tokio-util = "0.7"
+tower-http = { version = "0.7", features = ["limit"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }

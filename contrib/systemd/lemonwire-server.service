@@ -1,0 +1,41 @@
+# System service for the index server, behind a TLS reverse proxy on the same host.
+#
+# DynamicUser runs it as a throwaway user that owns /var/lib/lemonwire. Run the
+# admin commands (init, members, invite) as that same user via systemd-run:
+#
+#   sudo install -m 755 lemonwire-server /usr/local/bin/
+#   sudo cp lemonwire-server.service /etc/systemd/system/
+#   lw() { sudo systemd-run --quiet --wait --pty -p DynamicUser=yes \
+#            -p StateDirectory=lemonwire /usr/local/bin/lemonwire-server \
+#            --data /var/lib/lemonwire "$@"; }
+#   lw init --index-name "My Index" --admin-pubkey <key> \
+#      --public-url https://index.example --tracker-url https://index.example
+#   sudo systemctl enable --now lemonwire-server
+[Unit]
+Description=Lemon Wire index server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/lemonwire-server --data /var/lib/lemonwire serve --bind 127.0.0.1:8080 --tracker-bind 127.0.0.1:6969 --trust-proxy
+DynamicUser=yes
+StateDirectory=lemonwire
+StateDirectoryMode=0700
+Restart=on-failure
+# Hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target

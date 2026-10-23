@@ -1,0 +1,15 @@
+# Weekly pull requests for dependency updates (security fixes arrive as soon as they're
+# published).
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      rust:
+        patterns: ["*"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

@@ -1,0 +1,27 @@
+# Example: index server behind a reverse proxy on the same host.
+# First run:  docker compose run --rm lemonwire init --index-name "My Index" \
+#               --admin-pubkey <key from `lemonwire keys generate`> \
+#               --public-url https://index.example --tracker-url https://index.example
+# Then:       docker compose up -d
+services:
+  lemonwire:
+    build: ..
+    image: lemonwire-server
+    container_name: lemonwire
+    restart: unless-stopped
+    # Hardening: nothing to write outside /data, no Linux capabilities, no privilege
+    # escalation.
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      LEMONWIRE_TRUST_PROXY: "true"
+    ports:
+      - "127.0.0.1:8080:8080"   # API      -> https://index.example/v1/...
+      - "127.0.0.1:6969:6969"   # tracker  -> https://index.example/announce
+    volumes:
+      - ./data:/data

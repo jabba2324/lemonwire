@@ -154,6 +154,27 @@ mod tests {
         assert_eq!(pk.verify(b"hello", "AAAA"), Err(KeyError::BadSignature));
     }
 
+    /// RFC 8032 §7.1 TEST 2: pins the key and signature format, so a crypto library
+    /// update can't silently change what existing keys produce.
+    #[test]
+    fn rfc8032_test_vector() {
+        let h = |s: &str| b64_encode(&hex::decode(s).unwrap());
+        let kp = KeyPair::from_secret_b64(&h(
+            "4ccd089b28ff96da9db6c346ec114e0f5b8a319f35aba624da8cf6ed4fb8a6fb",
+        ))
+        .unwrap();
+        assert_eq!(
+            kp.public().to_b64(),
+            h("3d4017c3e843895a92b70aa74d1b7ebc9c982ccf2ec4968cc0cd55f12af4660c")
+        );
+        let sig = h(concat!(
+            "92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da",
+            "085ac1e43e15996e458f3613d0f11d8c387b2eaeb4302aeeb00d291612bb0c00"
+        ));
+        assert_eq!(kp.sign(&[0x72]), sig);
+        assert!(kp.public().verify(&[0x72], &sig).is_ok());
+    }
+
     #[test]
     fn rejects_bad_public_keys() {
         assert_eq!(PublicKey::from_b64("!!"), Err(KeyError::Base64));
